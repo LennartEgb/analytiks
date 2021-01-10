@@ -1,4 +1,4 @@
-package de.lennartegb.analytics
+package de.lennartegb.analytiks
 
 
 /**
@@ -9,19 +9,19 @@ package de.lennartegb.analytics
  * class FirebaseService: AnalyticsService { ... }
  *
  * // Adds the service to the analytics.
- * Analytics.addService(FirebaseService())
+ * Analytiks.addService(FirebaseService())
  *
  * // Creates an event or view that must be tracked
  * class CustomClickEvent: AnalyticsEvent { ... }
  *
- * Analytics.track(CustomClickEvent())
+ * Analytiks.track(CustomClickEvent())
  * ```
  */
-object Analytics {
+object Analytiks {
 
-    private val services = mutableListOf<AnalyticsService>()
+    private val services = mutableListOf<Service>()
 
-    private val MAIN_SERVICE = object : AnalyticsService {
+    private val MAIN_SERVICE = object : Service {
         override val isEnabled: Boolean = true
 
         override fun track(event: AnalyticsEvent) {
@@ -44,7 +44,7 @@ object Analytics {
             return@synchronized services.size
         }
 
-    fun registerService(service: AnalyticsService) {
+    fun registerService(service: Service) {
         synchronized(services) {
             services.add(service)
         }

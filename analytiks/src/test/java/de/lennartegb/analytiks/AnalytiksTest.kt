@@ -1,4 +1,4 @@
-package de.lennartegb.analytics
+package de.lennartegb.analytiks
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -9,12 +9,12 @@ import kotlin.test.assertTrue
 import kotlin.test.fail
 
 
-internal class AnalyticsTest {
+internal class AnalytiksTest {
 
 
     @BeforeEach
     fun cleanUpAnalytics() {
-        Analytics.unregisterAllServices()
+        Analytiks.unregisterAllServices()
     }
 
 
@@ -22,7 +22,7 @@ internal class AnalyticsTest {
     inner class GetServiceCount {
         @Test
         fun `when no service was added returns 0`() {
-            assertEquals(expected = 0, actual = Analytics.serviceCount)
+            assertEquals(expected = 0, actual = Analytiks.serviceCount)
         }
     }
 
@@ -31,7 +31,7 @@ internal class AnalyticsTest {
 
         @Test
         fun `with one service and serviceCount returns 1`() {
-            Analytics.registerService(object : AnalyticsService {
+            Analytiks.registerService(object : Service {
                 override val isEnabled: Boolean
                     get() = fail("Should never be called")
 
@@ -45,12 +45,12 @@ internal class AnalyticsTest {
 
             })
 
-            assertEquals(expected = 1, actual = Analytics.serviceCount)
+            assertEquals(expected = 1, actual = Analytiks.serviceCount)
         }
 
         @Test
         fun `with two services and serviceCount returns 2`() {
-            val testService = object : AnalyticsService {
+            val testService = object : Service {
                 override val isEnabled: Boolean
                     get() = fail("Should never be called")
 
@@ -64,10 +64,10 @@ internal class AnalyticsTest {
 
             }
 
-            Analytics.registerService(testService)
-            Analytics.registerService(testService)
+            Analytiks.registerService(testService)
+            Analytiks.registerService(testService)
 
-            assertEquals(expected = 2, actual = Analytics.serviceCount)
+            assertEquals(expected = 2, actual = Analytiks.serviceCount)
         }
 
     }
@@ -80,7 +80,7 @@ internal class AnalyticsTest {
         }
 
         private fun getTestService(isEnabled: Boolean, onTrack: () -> Unit) =
-            object : AnalyticsService {
+            object : Service {
                 override val isEnabled: Boolean = isEnabled
 
                 override fun track(event: AnalyticsEvent) {
@@ -96,12 +96,12 @@ internal class AnalyticsTest {
         @Test
         fun `if service is enabled calls event tracking of child services`() {
             var trackingIsCalled = false
-            Analytics.registerService(
+            Analytiks.registerService(
                 getTestService(
                     isEnabled = true,
                     onTrack = { trackingIsCalled = true })
             )
-            Analytics.track(testEvent)
+            Analytiks.track(testEvent)
             assertTrue(
                 actual = trackingIsCalled,
                 message = "Tracking should have been called and changed the test boolean"
@@ -111,12 +111,12 @@ internal class AnalyticsTest {
         @Test
         fun `if service is not enabled does not call event tracking of child services`() {
             var trackingIsCalled = false
-            Analytics.registerService(
+            Analytiks.registerService(
                 getTestService(
                     isEnabled = false,
                     onTrack = { trackingIsCalled = true })
             )
-            Analytics.track(testEvent)
+            Analytiks.track(testEvent)
             assertFalse(
                 actual = trackingIsCalled,
                 message = "Tracking should have not been called and not changed the test boolean"
@@ -131,7 +131,7 @@ internal class AnalyticsTest {
             override fun getName(): String = "TEST_VIEW"
         }
         private fun getTestService(isEnabled: Boolean, onTrack: () -> Unit) =
-            object : AnalyticsService {
+            object : Service {
                 override val isEnabled: Boolean = isEnabled
 
                 override fun track(event: AnalyticsEvent) {
@@ -147,12 +147,12 @@ internal class AnalyticsTest {
         @Test
         fun `if service is enabled calls view tracking of child services`() {
             var trackingIsCalled = false
-            Analytics.registerService(
+            Analytiks.registerService(
                 getTestService(
                     isEnabled = true,
                     onTrack = { trackingIsCalled = true })
             )
-            Analytics.track(testView)
+            Analytiks.track(testView)
             assertTrue(
                 actual = trackingIsCalled,
                 message = "Tracking should have been called and changed the test boolean"
@@ -162,12 +162,12 @@ internal class AnalyticsTest {
         @Test
         fun `if service is not enabled does not call view tracking of child services`() {
             var trackingIsCalled = false
-            Analytics.registerService(
+            Analytiks.registerService(
                 getTestService(
                     isEnabled = false,
                     onTrack = { trackingIsCalled = true })
             )
-            Analytics.track(testView)
+            Analytiks.track(testView)
             assertFalse(
                 actual = trackingIsCalled,
                 message = "Tracking should have not been called and not changed the test boolean"

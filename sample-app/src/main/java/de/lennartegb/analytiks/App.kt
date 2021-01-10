@@ -1,4 +1,4 @@
-package de.lennartegb.analytics
+package de.lennartegb.analytiks
 
 import android.app.Application
 import timber.log.Timber
@@ -8,7 +8,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Analytics.registerService(DebugService())
+        Analytiks.registerService(DebugService())
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -18,7 +18,7 @@ class App : Application() {
 
 }
 
-private class DebugService : AnalyticsService {
+private class DebugService : Service {
     override val isEnabled: Boolean
         get() = BuildConfig.DEBUG
 

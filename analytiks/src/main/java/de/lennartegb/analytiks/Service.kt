@@ -1,10 +1,10 @@
-package de.lennartegb.analytics
+package de.lennartegb.analytiks
 
 /**
  * Service used for analytics. Examples for analytics could be Firebase, Sentry or an own
  * implementation.
  */
-interface AnalyticsService {
+interface Service {
 
     /**
      * If the service is enabled. This could be controlled by a configuration file, e.g.

@@ -1,8 +1,8 @@
-package de.lennartegb.analytics
+package de.lennartegb.analytiks
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import de.lennartegb.analytics.databinding.ActivityMainBinding
+import de.lennartegb.analytiks.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,13 +11,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonTrack.setOnClickListener {
-            Analytics.track(ButtonClickEvent())
+            Analytiks.track(ButtonClickEvent())
         }
     }
 
     override fun onResume() {
         super.onResume()
-        Analytics.track(MainScreenView())
+        Analytiks.track(MainScreenView())
     }
 }
 

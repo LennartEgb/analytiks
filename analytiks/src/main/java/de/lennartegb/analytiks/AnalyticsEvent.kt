@@ -1,4 +1,4 @@
-package de.lennartegb.analytics
+package de.lennartegb.analytiks
 
 interface AnalyticsEvent {
     fun getParameters(): Map<String, String> = emptyMap()

@@ -2,7 +2,7 @@ package de.lennartegb.analytiks
 
 
 /**
- * Analytics object, that is used for tracking [AnalytiksEvent]s and [AnalytiksView]s. The pattern
+ * Analytics object, that is used for tracking [Analytiks.Event]s and [Analytiks.View]s. The pattern
  * of Jake Whartons Timber was used as a role model. Example usage:
  * ```
  * // Analytics service with Firebase usage under the hood

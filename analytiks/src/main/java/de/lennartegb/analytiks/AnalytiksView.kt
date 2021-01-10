@@ -1,6 +1,6 @@
 package de.lennartegb.analytiks
 
 
-interface AnalyticsView {
+interface AnalytiksView {
     fun getName(): String
 }

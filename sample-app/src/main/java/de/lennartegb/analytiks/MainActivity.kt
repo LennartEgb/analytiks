@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-private class ButtonClickEvent : AnalyticsEvent {
+private class ButtonClickEvent : Analytiks.Event {
     override fun getName(): String = "Button Clicked"
 
     override fun getParameters(): Map<String, String> {
@@ -31,7 +31,7 @@ private class ButtonClickEvent : AnalyticsEvent {
     }
 }
 
-private class MainScreenView : AnalyticsView {
+private class MainScreenView : Analytiks.View {
     override fun getName(): String = "Main screen displayed"
 
 }

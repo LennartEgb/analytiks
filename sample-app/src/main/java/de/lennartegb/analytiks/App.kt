@@ -18,15 +18,15 @@ class App : Application() {
 
 }
 
-private class DebugService : Service {
+private class DebugService : Analytiks.Service {
     override val isEnabled: Boolean
         get() = BuildConfig.DEBUG
 
-    override fun track(event: AnalyticsEvent) {
+    override fun track(event: Analytiks.Event) {
         Timber.d("EVENT: ${event.getName()}; PARAMS: ${event.getParameters()}")
     }
 
-    override fun track(view: AnalyticsView) {
+    override fun track(view: Analytiks.View) {
         Timber.d("EVENT: ${view.getName()}")
     }
 

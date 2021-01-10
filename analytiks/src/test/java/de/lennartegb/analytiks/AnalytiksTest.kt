@@ -31,15 +31,15 @@ internal class AnalytiksTest {
 
         @Test
         fun `with one service and serviceCount returns 1`() {
-            Analytiks.registerService(object : Service {
+            Analytiks.registerService(object : Analytiks.Service {
                 override val isEnabled: Boolean
                     get() = fail("Should never be called")
 
-                override fun track(event: AnalyticsEvent) {
+                override fun track(event: Analytiks.Event) {
                     fail("Should never be called")
                 }
 
-                override fun track(view: AnalyticsView) {
+                override fun track(view: Analytiks.View) {
                     fail("Should never be called")
                 }
 
@@ -50,15 +50,15 @@ internal class AnalytiksTest {
 
         @Test
         fun `with two services and serviceCount returns 2`() {
-            val testService = object : Service {
+            val testService = object :Analytiks.Service {
                 override val isEnabled: Boolean
                     get() = fail("Should never be called")
 
-                override fun track(event: AnalyticsEvent) {
+                override fun track(event: Analytiks.Event) {
                     fail("Should never be called")
                 }
 
-                override fun track(view: AnalyticsView) {
+                override fun track(view: Analytiks.View) {
                     fail("Should never be called")
                 }
 
@@ -75,19 +75,19 @@ internal class AnalytiksTest {
     @Nested
     inner class TrackEvent {
 
-        private val testEvent = object : AnalyticsEvent {
+        private val testEvent = object : Analytiks.Event {
             override fun getName(): String = "TEST_EVENT"
         }
 
         private fun getTestService(isEnabled: Boolean, onTrack: () -> Unit) =
-            object : Service {
+            object :Analytiks.Service {
                 override val isEnabled: Boolean = isEnabled
 
-                override fun track(event: AnalyticsEvent) {
+                override fun track(event: Analytiks.Event) {
                     onTrack()
                 }
 
-                override fun track(view: AnalyticsView) {
+                override fun track(view: Analytiks.View) {
                     fail("View tracking should never be called when tracking event!")
                 }
 
@@ -127,18 +127,18 @@ internal class AnalytiksTest {
     @Nested
     inner class TrackView {
 
-        private val testView = object : AnalyticsView {
+        private val testView = object : Analytiks.View {
             override fun getName(): String = "TEST_VIEW"
         }
         private fun getTestService(isEnabled: Boolean, onTrack: () -> Unit) =
-            object : Service {
+            object :Analytiks.Service {
                 override val isEnabled: Boolean = isEnabled
 
-                override fun track(event: AnalyticsEvent) {
+                override fun track(event: Analytiks.Event) {
                     fail("Event tracking should never be called when tracking view!")
                 }
 
-                override fun track(view: AnalyticsView) {
+                override fun track(view: Analytiks.View) {
                     onTrack()
                 }
 

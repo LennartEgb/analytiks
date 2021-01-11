@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonTrack.setOnClickListener {
-            Analytiks.track(ButtonClickEvent)
+            Analytiks.track(ButtonClickEvent("That"))
         }
     }
 
@@ -21,9 +21,11 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-private val ButtonClickEvent = Analytiks.Action.Event(
-    name = "Button Clicked",
-    params = mapOf("This" to "That")
-)
+private val ButtonClickEvent: ((String) -> Analytiks.Action) = { value ->
+    Analytiks.Action.Event(
+        name = "Button Clicked",
+        params = mapOf("This" to value)
+    )
+}
 
 private val MainScreenView = Analytiks.Action.View(name = "Main screen displayed")

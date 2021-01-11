@@ -22,12 +22,11 @@ private class DebugService : Analytiks.Service {
     override val isEnabled: Boolean
         get() = BuildConfig.DEBUG
 
-    override fun track(event: Analytiks.Event) {
-        Timber.d("EVENT: ${event.getName()}; PARAMS: ${event.getParameters()}")
-    }
-
-    override fun track(view: Analytiks.View) {
-        Timber.d("EVENT: ${view.getName()}")
+    override fun track(action: Analytiks.Action) {
+        when (action) {
+            is Analytiks.Action.Event -> Timber.d("EVENT: $action")
+            is Analytiks.Action.View -> Timber.d("VIEW: $action")
+        }
     }
 
 }

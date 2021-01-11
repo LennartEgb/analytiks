@@ -53,12 +53,6 @@ object Analytiks {
         val name: String
 
         /**
-         * If the [Analytiks.Service] is enabled. This can be done for example by a configuration
-         * file.
-         */
-        val isEnabled: Boolean
-
-        /**
          * Tracks an action of the user.
          */
         fun track(action: Action)
@@ -98,8 +92,7 @@ object Analytiks {
      * Tracks an [Analytiks.Action] and dispatches it to all registered services.
      */
     fun track(action: Action) {
-        services.filter { it.isEnabled }
-            .forEach { it.track(action) }
+        services.forEach { it.track(action) }
     }
 
 }

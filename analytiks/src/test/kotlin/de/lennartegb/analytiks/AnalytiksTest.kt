@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
@@ -32,9 +31,6 @@ internal class AnalytiksTest {
     inner class RegisterService {
 
         private inner class TestService(override val name: String) : Analytiks.Service {
-            override val isEnabled: Boolean
-                get() = fail("Should never be called")
-
             override fun track(action: Analytiks.Action) {
                 fail("Should never be called")
             }
@@ -71,7 +67,6 @@ internal class AnalytiksTest {
 
         private inner class TestService(
             override val name: String = "TEST_SERVICE",
-            override val isEnabled: Boolean,
             private val onTrack: () -> Unit,
         ) : Analytiks.Service {
             override fun track(action: Analytiks.Action) {
@@ -83,9 +78,9 @@ internal class AnalytiksTest {
         }
 
         @Test
-        fun `if service is enabled calls event tracking of child services`() {
+        fun `with registered service changes boolean flag to true`() {
             var trackingIsCalled = false
-            val service = TestService(isEnabled = true, onTrack = { trackingIsCalled = true })
+            val service = TestService(onTrack = { trackingIsCalled = true })
 
             Analytiks.registerService(service)
 
@@ -96,22 +91,6 @@ internal class AnalytiksTest {
                 message = "Tracking should have been called and changed the test boolean"
             )
         }
-
-        @Test
-        fun `if service is not enabled does not call event tracking of child services`() {
-            var trackingIsCalled = false
-            val service = TestService(isEnabled = false, onTrack = { trackingIsCalled = true })
-
-            Analytiks.registerService(service)
-
-            Analytiks.track(testEvent)
-
-            assertFalse(
-                actual = trackingIsCalled,
-                message = "Tracking should have not been called and not changed the test boolean"
-            )
-        }
-
     }
 
     @Nested
@@ -121,7 +100,6 @@ internal class AnalytiksTest {
 
         private inner class TestService(
             override val name: String = "TEST_SERVICE",
-            override val isEnabled: Boolean,
             private val onTrack: () -> Unit
         ) : Analytiks.Service {
             override fun track(action: Analytiks.Action) {
@@ -133,9 +111,9 @@ internal class AnalytiksTest {
         }
 
         @Test
-        fun `if service is enabled calls view tracking of child services`() {
+        fun `with registered service changes boolean flag to true`() {
             var trackingIsCalled = false
-            val service = TestService(isEnabled = true, onTrack = { trackingIsCalled = true })
+            val service = TestService(onTrack = { trackingIsCalled = true })
 
             Analytiks.registerService(service)
 
@@ -144,21 +122,6 @@ internal class AnalytiksTest {
             assertTrue(
                 actual = trackingIsCalled,
                 message = "Tracking should have been called and changed the test boolean"
-            )
-        }
-
-        @Test
-        fun `if service is not enabled does not call view tracking of child services`() {
-            var trackingIsCalled = false
-            val service = TestService(isEnabled = false, onTrack = { trackingIsCalled = true })
-
-            Analytiks.registerService(service)
-
-            Analytiks.track(testView)
-
-            assertFalse(
-                actual = trackingIsCalled,
-                message = "Tracking should have not been called and not changed the test boolean"
             )
         }
     }

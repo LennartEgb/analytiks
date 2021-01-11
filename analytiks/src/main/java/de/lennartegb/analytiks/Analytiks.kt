@@ -46,7 +46,13 @@ object Analytiks {
     interface Service {
 
         /**
-         * If the service is enabled. This could be controlled by a configuration file, e.g.
+         * The name of the [Analytiks.Service]
+         */
+        val name: String
+
+        /**
+         * If the [Analytiks.Service] is enabled. This can be done for example by a configuration
+         * file.
          */
         val isEnabled: Boolean
 
@@ -59,16 +65,6 @@ object Analytiks {
 
     private val services = mutableListOf<Service>()
 
-    private val MAIN_SERVICE = object : Service {
-        override val isEnabled: Boolean = true
-
-        override fun track(action: Action) {
-            services.filter { it.isEnabled }
-                .forEach { it.track(action) }
-        }
-    }
-
-
     /**
      * Return amount of services registered.
      */
@@ -79,10 +75,13 @@ object Analytiks {
 
     /**
      * Registers an [Analytiks.Service] to be used for tracking.
+     * @throws AlreadyRegisteredService if two services with the same name are registered.
      */
     fun registerService(service: Service) {
         synchronized(services) {
-            services.add(service)
+            service.takeUnless { it.name in services.map(Service::name) }
+                ?.also { services.add(it) }
+                ?: throw AlreadyRegisteredService("The service ${service.name} is already registered.")
         }
     }
 
@@ -97,7 +96,8 @@ object Analytiks {
      * Tracks an [Analytiks.Action] and dispatches it to all registered services.
      */
     fun track(action: Action) {
-        MAIN_SERVICE.track(action = action)
+        services.filter { it.isEnabled }
+            .forEach { it.track(action) }
     }
 
 }

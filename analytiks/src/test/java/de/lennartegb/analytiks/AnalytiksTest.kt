@@ -3,6 +3,7 @@ package de.lennartegb.analytiks
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -29,7 +30,9 @@ internal class AnalytiksTest {
     @Nested
     inner class RegisterService {
 
-        private val testService = object : Analytiks.Service {
+        private fun getTestService(name: String) = object : Analytiks.Service {
+            override val name: String
+                get() = name
             override val isEnabled: Boolean
                 get() = fail("Should never be called")
 
@@ -40,15 +43,24 @@ internal class AnalytiksTest {
 
         @Test
         fun `with one service and serviceCount returns 1`() {
-            Analytiks.registerService(testService)
+            Analytiks.registerService(getTestService(name = "TEST_1"))
             assertEquals(expected = 1, actual = Analytiks.serviceCount)
         }
 
         @Test
-        fun `with two services and serviceCount returns 2`() {
-            Analytiks.registerService(testService)
-            Analytiks.registerService(testService)
+        fun `with two different services and serviceCount returns 2`() {
+            Analytiks.registerService(getTestService(name = "TEST_1"))
+            Analytiks.registerService(getTestService(name = "TEST_2"))
             assertEquals(expected = 2, actual = Analytiks.serviceCount)
+        }
+
+        @Test
+        fun `with two equal services throws IllegalArgumentException`() {
+            Analytiks.registerService(getTestService(name = "TEST_1"))
+
+            assertThrows<AlreadyRegisteredService> {
+                Analytiks.registerService(getTestService(name = "TEST_1"))
+            }
         }
 
     }
@@ -60,6 +72,8 @@ internal class AnalytiksTest {
 
         private fun getTestService(isEnabled: Boolean, onTrack: () -> Unit) =
             object : Analytiks.Service {
+                override val name: String
+                    get() = "TEST_SERVICE"
                 override val isEnabled: Boolean = isEnabled
 
                 override fun track(action: Analytiks.Action) {
@@ -109,6 +123,8 @@ internal class AnalytiksTest {
 
         private fun getTestService(isEnabled: Boolean, onTrack: () -> Unit) =
             object : Analytiks.Service {
+                override val name: String
+                    get() = "TEST_SERVICE"
                 override val isEnabled: Boolean = isEnabled
 
                 override fun track(action: Analytiks.Action) {

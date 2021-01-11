@@ -19,6 +19,9 @@ class App : Application() {
 }
 
 private class DebugService : Analytiks.Service {
+    override val name: String
+        get() = "DEBUG_SERVICE"
+
     override val isEnabled: Boolean
         get() = BuildConfig.DEBUG
 

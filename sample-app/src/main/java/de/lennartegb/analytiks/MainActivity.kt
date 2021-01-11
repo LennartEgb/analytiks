@@ -11,27 +11,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonTrack.setOnClickListener {
-            Analytiks.track(ButtonClickEvent())
+            Analytiks.track(ButtonClickEvent)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        Analytiks.track(MainScreenView())
+        Analytiks.track(MainScreenView)
     }
 }
 
-private class ButtonClickEvent : Analytiks.Event {
-    override fun getName(): String = "Button Clicked"
+private val ButtonClickEvent = Analytiks.Action.Event(
+    name = "Button Clicked",
+    params = mapOf("This" to "That")
+)
 
-    override fun getParameters(): Map<String, String> {
-        return super.getParameters().toMutableMap().apply {
-            put("This", "That")
-        }
-    }
-}
-
-private class MainScreenView : Analytiks.View {
-    override fun getName(): String = "Main screen displayed"
-
-}
+private val MainScreenView = Analytiks.Action.View(name = "Main screen displayed")

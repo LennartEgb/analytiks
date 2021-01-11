@@ -57,9 +57,9 @@ internal class AnalytiksTest {
         fun `with two equal services throws IllegalArgumentException`() {
             Analytiks.registerService(TestService(name = "TEST_1"))
 
-            assertThrows<AlreadyRegisteredService> {
-                Analytiks.registerService(TestService(name = "TEST_1"))
-            }
+            val failingLambda = { Analytiks.registerService(TestService(name = "TEST_1")) }
+
+            assertThrows<AlreadyRegisteredService> { failingLambda() }
         }
 
     }

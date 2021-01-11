@@ -1,5 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.lennartegb.analytiks">
-
-</manifest>
+<manifest package="de.lennartegb.analytiks" />

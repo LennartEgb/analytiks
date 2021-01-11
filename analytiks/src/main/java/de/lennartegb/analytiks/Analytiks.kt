@@ -1,5 +1,7 @@
 package de.lennartegb.analytiks
 
+import de.lennartegb.analytiks.errors.AlreadyRegisteredService
+
 
 /**
  * Analytics object, that is used for tracking [Analytiks.Action]s. The pattern

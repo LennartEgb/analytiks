@@ -1,4 +1,4 @@
-package de.lennartegb.analytiks
+package de.lennartegb.analytiks.errors
 
 class AlreadyRegisteredService(
     message: String? = null,

@@ -1,5 +1,6 @@
 package de.lennartegb.analytiks
 
+import de.lennartegb.analytiks.errors.AlreadyRegisteredService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

@@ -32,7 +32,7 @@
         </compilerSettings>
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/../../../analytiks/build/tmp/kotlin-classes/debug" />
-          <option name="classpath" value="$MODULE_DIR$/../../../analytiks/build/intermediates/compile_r_class_jar/debug/R.jar:/Users/Lennart/.gradle/caches/transforms-2/files-2.1/2f6bacf0834187a401bedd77a440bcca/jetified-kotlin-stdlib-1.4.21.jar:/Users/Lennart/.gradle/caches/transforms-2/files-2.1/338ce0e4174ebc521a291e74323adb25/jetified-kotlin-stdlib-common-1.4.21.jar:/Users/Lennart/.gradle/caches/transforms-2/files-2.1/5e23b4e0cd2c91b1c523f85753bd14d3/jetified-annotations-13.0.jar:/Users/Lennart/Library/Android/sdk/platforms/android-30/android.jar:/Users/Lennart/Library/Android/sdk/build-tools/30.0.2/core-lambda-stubs.jar" />
+          <option name="classpath" value="$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2f6bacf0834187a401bedd77a440bcca/jetified-kotlin-stdlib-1.4.21.jar:/Users/lennart.egbers/.gradle/caches/transforms-2/files-2.1/338ce0e4174ebc521a291e74323adb25/jetified-kotlin-stdlib-common-1.4.21.jar:/Users/lennart.egbers/.gradle/caches/transforms-2/files-2.1/5e23b4e0cd2c91b1c523f85753bd14d3/jetified-annotations-13.0.jar:/Users/lennart.egbers/Library/Android/sdk/platforms/android-30/android.jar:/Users/lennart.egbers/Library/Android/sdk/build-tools/30.0.2/core-lambda-stubs.jar" />
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
           <option name="moduleName" value="analytiks_debug" />

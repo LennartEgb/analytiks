@@ -14,7 +14,7 @@ internal class AnalytiksTest {
 
     @BeforeEach
     fun cleanUpAnalytics() {
-        Analytiks.unregisterAllServices()
+        Analytiks.clearAllServices()
     }
 
 
@@ -29,44 +29,25 @@ internal class AnalytiksTest {
     @Nested
     inner class RegisterService {
 
+        private val testService = object : Analytiks.Service {
+            override val isEnabled: Boolean
+                get() = fail("Should never be called")
+
+            override fun track(action: Analytiks.Action) {
+                fail("Should never be called")
+            }
+        }
+
         @Test
         fun `with one service and serviceCount returns 1`() {
-            Analytiks.registerService(object : Analytiks.Service {
-                override val isEnabled: Boolean
-                    get() = fail("Should never be called")
-
-                override fun track(event: Analytiks.Event) {
-                    fail("Should never be called")
-                }
-
-                override fun track(view: Analytiks.View) {
-                    fail("Should never be called")
-                }
-
-            })
-
+            Analytiks.registerService(testService)
             assertEquals(expected = 1, actual = Analytiks.serviceCount)
         }
 
         @Test
         fun `with two services and serviceCount returns 2`() {
-            val testService = object :Analytiks.Service {
-                override val isEnabled: Boolean
-                    get() = fail("Should never be called")
-
-                override fun track(event: Analytiks.Event) {
-                    fail("Should never be called")
-                }
-
-                override fun track(view: Analytiks.View) {
-                    fail("Should never be called")
-                }
-
-            }
-
             Analytiks.registerService(testService)
             Analytiks.registerService(testService)
-
             assertEquals(expected = 2, actual = Analytiks.serviceCount)
         }
 
@@ -75,22 +56,18 @@ internal class AnalytiksTest {
     @Nested
     inner class TrackEvent {
 
-        private val testEvent = object : Analytiks.Event {
-            override fun getName(): String = "TEST_EVENT"
-        }
+        private val testEvent = Analytiks.Action.Event("TEST_EVENT")
 
         private fun getTestService(isEnabled: Boolean, onTrack: () -> Unit) =
-            object :Analytiks.Service {
+            object : Analytiks.Service {
                 override val isEnabled: Boolean = isEnabled
 
-                override fun track(event: Analytiks.Event) {
-                    onTrack()
+                override fun track(action: Analytiks.Action) {
+                    when (action) {
+                        is Analytiks.Action.Event -> onTrack()
+                        is Analytiks.Action.View -> fail("View tracking should never be called when tracking event!")
+                    }
                 }
-
-                override fun track(view: Analytiks.View) {
-                    fail("View tracking should never be called when tracking event!")
-                }
-
             }
 
         @Test
@@ -122,26 +99,24 @@ internal class AnalytiksTest {
                 message = "Tracking should have not been called and not changed the test boolean"
             )
         }
+
     }
 
     @Nested
     inner class TrackView {
 
-        private val testView = object : Analytiks.View {
-            override fun getName(): String = "TEST_VIEW"
-        }
+        private val testView = Analytiks.Action.View(name = "TEST_VIEW")
+
         private fun getTestService(isEnabled: Boolean, onTrack: () -> Unit) =
-            object :Analytiks.Service {
+            object : Analytiks.Service {
                 override val isEnabled: Boolean = isEnabled
 
-                override fun track(event: Analytiks.Event) {
-                    fail("Event tracking should never be called when tracking view!")
+                override fun track(action: Analytiks.Action) {
+                    when (action) {
+                        is Analytiks.Action.Event -> fail("Event tracking should never be called when tracking view!")
+                        is Analytiks.Action.View -> onTrack()
+                    }
                 }
-
-                override fun track(view: Analytiks.View) {
-                    onTrack()
-                }
-
             }
 
         @Test
@@ -173,6 +148,5 @@ internal class AnalytiksTest {
                 message = "Tracking should have not been called and not changed the test boolean"
             )
         }
-
     }
 }

@@ -2,34 +2,42 @@ package de.lennartegb.analytiks
 
 
 /**
- * Analytics object, that is used for tracking [Analytiks.Event]s and [Analytiks.View]s. The pattern
- * of Jake Whartons Timber was used as a role model. Example usage:
+ * Analytics object, that is used for tracking [Analytiks.Action]s. The pattern
+ * of Jake Whartons Timber was used as a role model. The idea behind this is a SOLID implementation
+ * for using analytics based on the implementation by sofakingforever but in a lightweight
+ * interface. Example usage:
  * ```
  * // Analytics service with Firebase usage under the hood
  * class FirebaseService: AnalyticsService { ... }
  *
  * // Adds the service to the analytics.
- * Analytiks.addService(FirebaseService())
+ * Analytiks.registerService(FirebaseService())
  *
  * // Creates an event or view that must be tracked
- * class CustomClickEvent: AnalyticsEvent { ... }
+ * val CustomClickEvent = Analytiks.Action.Event(name = "CUSTOM")
  *
- * Analytiks.track(CustomClickEvent())
+ * Analytiks.track(CustomClickEvent)
  * ```
  */
 object Analytiks {
 
+    /**
+     * An action that must be send to a service.
+     * @param name of the given action
+     * @param params to send for analytics
+     */
+    @Suppress("MemberVisibilityCanBePrivate")
+    sealed class Action(val name: String, val params: Map<String, String>) {
+        /**
+         * An event that represents an action of the user.
+         */
+        class Event(name: String, params: Map<String, String> = emptyMap()) : Action(name, params)
 
-    interface Event {
-        fun getParameters(): Map<String, String> = emptyMap()
-        fun getName(): String
+        /**
+         * An event that represents a view of the user.
+         */
+        class View(name: String, params: Map<String, String> = emptyMap()) : Action(name, params)
     }
-
-
-    interface View {
-        fun getName(): String
-    }
-
 
     /**
      * Service used for analytics. Examples for analytics could be Firebase, Sentry or an own
@@ -43,15 +51,9 @@ object Analytiks {
         val isEnabled: Boolean
 
         /**
-         * Tracks an event of the user.
+         * Tracks an action of the user.
          */
-        fun track(event: Event)
-
-        /**
-         * Tracks a view of a user. E.g. the user opens a specific screen, or a simple view will be
-         * shown.
-         */
-        fun track(view: View)
+        fun track(action: Action)
     }
 
 
@@ -60,17 +62,12 @@ object Analytiks {
     private val MAIN_SERVICE = object : Service {
         override val isEnabled: Boolean = true
 
-        override fun track(event: Event) {
+        override fun track(action: Action) {
             services.filter { it.isEnabled }
-                .forEach { it.track(event) }
+                .forEach { it.track(action) }
         }
-
-        override fun track(view: View) {
-            services.filter { it.isEnabled }
-                .forEach { it.track(view) }
-        }
-
     }
+
 
     /**
      * Return amount of services registered.
@@ -80,24 +77,27 @@ object Analytiks {
             return@synchronized services.size
         }
 
+    /**
+     * Registers an [Analytiks.Service] to be used for tracking.
+     */
     fun registerService(service: Service) {
         synchronized(services) {
             services.add(service)
         }
     }
 
-    fun unregisterAllServices() {
+    /**
+     * Clears all [Analytiks.Service]s.
+     */
+    fun clearAllServices() {
         services.clear()
     }
 
-    // region Tracking
-    fun track(event: Event) {
-        MAIN_SERVICE.track(event)
+    /**
+     * Tracks an [Analytiks.Action] and dispatches it to all registered services.
+     */
+    fun track(action: Action) {
+        MAIN_SERVICE.track(action = action)
     }
-
-    fun track(view: View) {
-        MAIN_SERVICE.track(view)
-    }
-    // endregion
 
 }

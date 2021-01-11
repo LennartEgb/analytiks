@@ -8,7 +8,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Analytiks.registerService(DebugService())
+         Analytiks.registerService(DebugService())
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -18,18 +18,18 @@ class App : Application() {
 
 }
 
-//private class DebugService : Analytiks.Service {
-//    override val name: String
-//        get() = "DEBUG_SERVICE"
-//
-//    override val isEnabled: Boolean
-//        get() = BuildConfig.DEBUG
-//
-//    override fun track(action: Analytiks.Action) {
-//        when (action) {
-//            is Analytiks.Action.Event -> Timber.d("EVENT: $action")
-//            is Analytiks.Action.View -> Timber.d("VIEW: $action")
-//        }
-//    }
-//
-//}
+private class DebugService : Analytiks.Service {
+    override val name: String
+        get() = "DEBUG_SERVICE"
+
+    override val isEnabled: Boolean
+        get() = BuildConfig.DEBUG
+
+    override fun track(action: Analytiks.Action) {
+        when (action) {
+            is Analytiks.Action.Event -> Timber.d("EVENT: $action")
+            is Analytiks.Action.View -> Timber.d("VIEW: $action")
+        }
+    }
+
+}

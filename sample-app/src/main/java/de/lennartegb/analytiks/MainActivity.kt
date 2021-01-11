@@ -11,21 +11,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonTrack.setOnClickListener {
-//            Analytiks.track(ButtonClickEvent("That"))
+            Analytiks.track(ButtonClickEvent("That"))
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        Analytiks.track(MainScreenView)
-//    }
+    override fun onResume() {
+        super.onResume()
+        Analytiks.track(MainScreenView)
+    }
 }
 
-//private val ButtonClickEvent: ((String) -> Analytiks.Action) = { value ->
-//    Analytiks.Action.Event(
-//        name = "Button Clicked",
-//        params = mapOf("This" to value)
-//    )
-//}
-//
-//private val MainScreenView = Analytiks.Action.View(name = "Main screen displayed")
+private val ButtonClickEvent: ((String) -> Analytiks.Action) = { value ->
+    Analytiks.Action.Event(
+        name = "Button Clicked",
+        params = mapOf("This" to value)
+    )
+}
+
+private val MainScreenView = Analytiks.Action.View(name = "Main screen displayed")

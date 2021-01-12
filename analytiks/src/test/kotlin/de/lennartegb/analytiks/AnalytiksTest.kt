@@ -1,6 +1,7 @@
 package de.lennartegb.analytiks
 
 import de.lennartegb.analytiks.errors.AlreadyRegisteredService
+import de.lennartegb.analytiks.errors.RegisteringFailed
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -16,6 +17,12 @@ internal class AnalytiksTest {
     @BeforeEach
     fun cleanUpAnalytics() {
         Analytiks.clearAllServices()
+    }
+
+
+    @Test
+    fun `cannot register Analytiks to itself`() {
+        assertThrows<RegisteringFailed> { Analytiks.registerService(Analytiks) }
     }
 
 

@@ -1,6 +1,7 @@
 package de.lennartegb.analytiks
 
 import de.lennartegb.analytiks.errors.AlreadyRegisteredService
+import de.lennartegb.analytiks.errors.RegisteringFailed
 
 
 /**
@@ -39,6 +40,7 @@ object Analytiks : AnalytiksService {
      */
     fun registerService(service: AnalytiksService) {
         synchronized(services) {
+            if (service is Analytiks) throw RegisteringFailed("Cannot register Analytiks to itself.")
             service.takeUnless { it.name in services.map(AnalytiksService::name) }
                 ?.also { services.add(it) }
                 ?: throw AlreadyRegisteredService("The service ${service.name} is already registered.")

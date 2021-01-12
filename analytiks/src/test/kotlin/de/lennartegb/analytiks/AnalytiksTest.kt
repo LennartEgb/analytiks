@@ -30,8 +30,8 @@ internal class AnalytiksTest {
     @Nested
     inner class RegisterService {
 
-        private inner class TestService(override val name: String) : Analytiks.Service {
-            override fun track(action: Analytiks.Action) {
+        private inner class TestService(override val name: String) : AnalytiksService {
+            override fun track(action: AnalytiksAction) {
                 fail("Should never be called")
             }
         }
@@ -63,16 +63,16 @@ internal class AnalytiksTest {
     @Nested
     inner class TrackEvent {
 
-        private val testEvent = Analytiks.Action.Event("TEST_EVENT")
+        private val testEvent = AnalytiksAction.Event("TEST_EVENT")
 
         private inner class TestService(
             override val name: String = "TEST_SERVICE",
             private val onTrack: () -> Unit,
-        ) : Analytiks.Service {
-            override fun track(action: Analytiks.Action) {
+        ) : AnalytiksService {
+            override fun track(action: AnalytiksAction) {
                 when (action) {
-                    is Analytiks.Action.Event -> onTrack()
-                    is Analytiks.Action.View -> fail("View tracking should never be called when tracking event!")
+                    is AnalytiksAction.Event -> onTrack()
+                    is AnalytiksAction.View -> fail("View tracking should never be called when tracking event!")
                 }
             }
         }
@@ -96,16 +96,16 @@ internal class AnalytiksTest {
     @Nested
     inner class TrackView {
 
-        private val testView = Analytiks.Action.View(name = "TEST_VIEW")
+        private val testView = AnalytiksAction.View(name = "TEST_VIEW")
 
         private inner class TestService(
             override val name: String = "TEST_SERVICE",
             private val onTrack: () -> Unit
-        ) : Analytiks.Service {
-            override fun track(action: Analytiks.Action) {
+        ) : AnalytiksService {
+            override fun track(action: AnalytiksAction) {
                 when (action) {
-                    is Analytiks.Action.Event -> fail("Event tracking should never be called when tracking view!")
-                    is Analytiks.Action.View -> onTrack()
+                    is AnalytiksAction.Event -> fail("Event tracking should never be called when tracking view!")
+                    is AnalytiksAction.View -> onTrack()
                 }
             }
         }

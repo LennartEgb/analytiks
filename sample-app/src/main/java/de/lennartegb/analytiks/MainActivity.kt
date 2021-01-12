@@ -21,11 +21,11 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-private val ButtonClickEvent: ((String) -> Analytiks.Action) = { value ->
-    Analytiks.Action.Event(
+private val ButtonClickEvent: ((String) -> AnalytiksAction) = { value ->
+    AnalytiksAction.Event(
         name = "Button Clicked",
         params = mapOf("This" to value)
     )
 }
 
-private val MainScreenView = Analytiks.Action.View(name = "Main screen displayed")
+private val MainScreenView = AnalytiksAction.View(name = "Main screen displayed")

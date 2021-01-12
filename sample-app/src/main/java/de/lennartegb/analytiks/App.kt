@@ -17,14 +17,14 @@ class App : Application() {
 
 }
 
-private class DebugService : Analytiks.Service {
+private class DebugService : AnalytiksService {
     override val name: String
         get() = "DEBUG_SERVICE"
 
-    override fun track(action: Analytiks.Action) {
+    override fun track(action: AnalytiksAction) {
         when (action) {
-            is Analytiks.Action.Event -> Timber.d("EVENT: $action")
-            is Analytiks.Action.View -> Timber.d("VIEW: $action")
+            is AnalytiksAction.Event -> Timber.d("EVENT: $action")
+            is AnalytiksAction.View -> Timber.d("VIEW: $action")
         }
     }
 

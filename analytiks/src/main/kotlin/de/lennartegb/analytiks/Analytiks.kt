@@ -4,7 +4,7 @@ import de.lennartegb.analytiks.errors.AlreadyRegisteredService
 
 
 /**
- * Analytics object, that is used for tracking [Analytiks.Action]s. The pattern
+ * Analytics object, that is used for tracking [AnalytiksAction]s. The pattern
  * of Jake Whartons Timber was used as a role model. The idea behind this is a SOLID implementation
  * for using analytics based on the implementation by sofakingforever but in a lightweight
  * interface. Example usage:
@@ -21,45 +21,9 @@ import de.lennartegb.analytiks.errors.AlreadyRegisteredService
  * Analytiks.track(CustomClickEvent)
  * ```
  */
-object Analytiks {
-
-    /**
-     * An action that must be send to a service.
-     * @param name of the given action
-     * @param params to send for analytics
-     */
-    @Suppress("MemberVisibilityCanBePrivate")
-    sealed class Action(val name: String, val params: Map<String, String>) {
-        /**
-         * An event that represents an action of the user.
-         */
-        class Event(name: String, params: Map<String, String> = emptyMap()) : Action(name, params)
-
-        /**
-         * An event that represents a view of the user.
-         */
-        class View(name: String, params: Map<String, String> = emptyMap()) : Action(name, params)
-    }
-
-    /**
-     * Service used for analytics. Examples for analytics could be Firebase, Sentry or an own
-     * implementation.
-     */
-    interface Service {
-
-        /**
-         * The name of the [Analytiks.Service]
-         */
-        val name: String
-
-        /**
-         * Tracks an action of the user.
-         */
-        fun track(action: Action)
-    }
-
-
-    private val services = mutableListOf<Service>()
+object Analytiks : AnalytiksService {
+    private const val MAIN_SERVICE_NAME = "ANALYTIKS_MAIN_SERVICE"
+    private val services = mutableListOf<AnalytiksService>()
 
     /**
      * Return amount of services registered.
@@ -70,28 +34,28 @@ object Analytiks {
         }
 
     /**
-     * Registers an [Analytiks.Service] to be used for tracking.
+     * Registers an [AnalytiksService] to be used for tracking.
      * @throws AlreadyRegisteredService if two services with the same name are registered.
      */
-    fun registerService(service: Service) {
+    fun registerService(service: AnalytiksService) {
         synchronized(services) {
-            service.takeUnless { it.name in services.map(Service::name) }
+            service.takeUnless { it.name in services.map(AnalytiksService::name) }
                 ?.also { services.add(it) }
                 ?: throw AlreadyRegisteredService("The service ${service.name} is already registered.")
         }
     }
 
     /**
-     * Clears all [Analytiks.Service]s.
+     * Clears all [AnalytiksService]s.
      */
     fun clearAllServices() {
         services.clear()
     }
 
-    /**
-     * Tracks an [Analytiks.Action] and dispatches it to all registered services.
-     */
-    fun track(action: Action) {
+    override val name: String
+        get() = MAIN_SERVICE_NAME
+
+    override fun track(action: AnalytiksAction) {
         services.forEach { it.track(action) }
     }
 

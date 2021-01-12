@@ -2,6 +2,7 @@ package de.lennartegb.analytiks
 
 import de.lennartegb.analytiks.errors.AlreadyRegisteredService
 import de.lennartegb.analytiks.errors.RegisteringFailed
+import de.lennartegb.analytiks.errors.ServiceNotFound
 
 
 /**
@@ -24,14 +25,19 @@ import de.lennartegb.analytiks.errors.RegisteringFailed
  */
 object Analytiks : AnalytiksService {
     private const val MAIN_SERVICE_NAME = "ANALYTIKS_MAIN_SERVICE"
-    private val services = mutableListOf<AnalytiksService>()
+    private val serviceCache = mutableListOf<AnalytiksService>()
+
+    val services: List<AnalytiksService>
+        get() = synchronized(serviceCache) {
+            return@synchronized serviceCache.toList()
+        }
 
     /**
      * Return amount of services registered.
      */
     val serviceCount: Int
-        get() = synchronized(services) {
-            return@synchronized services.size
+        get() = synchronized(serviceCache) {
+            return@synchronized serviceCache.size
         }
 
     /**
@@ -39,10 +45,10 @@ object Analytiks : AnalytiksService {
      * @throws AlreadyRegisteredService if two services with the same name are registered.
      */
     fun registerService(service: AnalytiksService) {
-        synchronized(services) {
+        synchronized(serviceCache) {
             if (service is Analytiks) throw RegisteringFailed("Cannot register Analytiks to itself.")
-            service.takeUnless { it.name in services.map(AnalytiksService::name) }
-                ?.also { services.add(it) }
+            service.takeUnless { it.name in serviceCache.map(AnalytiksService::name) }
+                ?.also { serviceCache.add(it) }
                 ?: throw AlreadyRegisteredService("The service ${service.name} is already registered.")
         }
     }
@@ -51,14 +57,18 @@ object Analytiks : AnalytiksService {
      * Clears all [AnalytiksService]s.
      */
     fun clearAllServices() {
-        services.clear()
+        serviceCache.clear()
+    }
+
+    inline fun <reified T : AnalytiksService> get(): T {
+        return services.find { it is T } as? T
+            ?: throw ServiceNotFound()
     }
 
     override val name: String
         get() = MAIN_SERVICE_NAME
 
     override fun track(action: AnalytiksAction) {
-        services.forEach { it.track(action) }
+        serviceCache.forEach { it.track(action) }
     }
-
 }

@@ -2,11 +2,13 @@ package de.lennartegb.analytiks
 
 import de.lennartegb.analytiks.errors.AlreadyRegisteredService
 import de.lennartegb.analytiks.errors.RegisteringFailed
+import de.lennartegb.analytiks.errors.ServiceNotFound
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
@@ -31,6 +33,35 @@ internal class AnalytiksTest {
         @Test
         fun `when no service was added returns 0`() {
             assertEquals(expected = 0, actual = Analytiks.serviceCount)
+        }
+    }
+
+    @Nested
+    inner class Get {
+
+        private inner class TestService(private val onTrack: () -> Unit) : AnalytiksService {
+            override val name: String
+                get() = "TEST_SERVICE"
+
+            override fun track(action: AnalytiksAction) {
+                onTrack()
+            }
+
+        }
+
+        @Test
+        fun `with unregistered service throws ServiceNotFound`() {
+            assertThrows<ServiceNotFound> { Analytiks.get<TestService>() }
+        }
+
+        @Test
+        fun `with registered service returns TestService instance`() {
+            val service = TestService { }
+            Analytiks.registerService(service = service)
+
+            val actual = Analytiks.get<TestService>()
+
+            assertSame(expected = service, actual = actual)
         }
     }
 

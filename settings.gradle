@@ -1,3 +1,4 @@
+include ':analytiks-firebase'
 include ':analytiks'
 include ':sample-app'
 rootProject.name = "Analytics"

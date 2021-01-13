@@ -2,7 +2,7 @@ package de.lennartegb.analytiks
 
 import de.lennartegb.analytiks.errors.AlreadyRegisteredService
 import de.lennartegb.analytiks.errors.RegisteringFailed
-import de.lennartegb.analytiks.errors.ServiceNotFound
+import de.lennartegb.analytiks.errors.AnalytiksServiceNotFound
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -51,7 +51,7 @@ internal class AnalytiksTest {
 
         @Test
         fun `with unregistered service throws ServiceNotFound`() {
-            assertThrows<ServiceNotFound> { Analytiks.get<TestService>() }
+            assertThrows<AnalytiksServiceNotFound> { Analytiks.get<TestService>() }
         }
 
         @Test

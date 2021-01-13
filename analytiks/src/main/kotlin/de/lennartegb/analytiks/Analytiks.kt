@@ -2,7 +2,7 @@ package de.lennartegb.analytiks
 
 import de.lennartegb.analytiks.errors.AlreadyRegisteredService
 import de.lennartegb.analytiks.errors.RegisteringFailed
-import de.lennartegb.analytiks.errors.ServiceNotFound
+import de.lennartegb.analytiks.errors.AnalytiksServiceNotFound
 
 
 /**
@@ -62,7 +62,7 @@ object Analytiks : AnalytiksService {
 
     inline fun <reified T : AnalytiksService> get(): T {
         return services.find { it is T } as? T
-            ?: throw ServiceNotFound()
+            ?: throw AnalytiksServiceNotFound()
     }
 
     override val name: String

@@ -17,13 +17,12 @@ import de.lennartegb.analytiks.errors.RegisteringFailed
  * Analytiks.registerService(FirebaseService())
  *
  * // Creates an event or view that must be tracked
- * val CustomClickEvent = Analytiks.Action.Event(name = "CUSTOM")
+ * val CustomClickEvent = AnalytiksAction.Event(name = "CUSTOM")
  *
  * Analytiks.track(CustomClickEvent)
  * ```
  */
 object Analytiks : AnalytiksService {
-    private const val MAIN_SERVICE_NAME = "ANALYTIKS_MAIN_SERVICE"
     private val services = mutableListOf<AnalytiksService>()
 
     /**
@@ -36,14 +35,15 @@ object Analytiks : AnalytiksService {
 
     /**
      * Registers an [AnalytiksService] to be used for tracking.
+     * @param service An [AnalytiksService] to be registered.
      * @throws AlreadyRegisteredService if two services with the same name are registered.
      */
     fun registerService(service: AnalytiksService) {
         synchronized(services) {
             if (service is Analytiks) throw RegisteringFailed("Cannot register Analytiks to itself.")
-            service.takeUnless { it.name in services.map(AnalytiksService::name) }
+            service.takeUnless { it in services }
                 ?.also { services.add(it) }
-                ?: throw AlreadyRegisteredService("The service ${service.name} is already registered.")
+                ?: throw AlreadyRegisteredService("The service ${service::class.java.name} is already registered.")
         }
     }
 
@@ -53,9 +53,6 @@ object Analytiks : AnalytiksService {
     fun clearAllServices() {
         services.clear()
     }
-
-    override val name: String
-        get() = MAIN_SERVICE_NAME
 
     override fun track(action: AnalytiksAction) {
         services.forEach { it.track(action) }

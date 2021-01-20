@@ -7,12 +7,9 @@ package de.lennartegb.analytiks
 interface AnalytiksService {
 
     /**
-     * The name of the [AnalytiksService]
-     */
-    val name: String
-
-    /**
      * Tracks an action of the user.
+     * @param action [AnalytiksAction] to be tracked.
      */
     fun track(action: AnalytiksAction)
+
 }

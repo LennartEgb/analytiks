@@ -37,7 +37,7 @@ internal class AnalytiksTest {
     @Nested
     inner class RegisterService {
 
-        private inner class TestService(override val name: String) : AnalytiksService {
+        private inner class TestService() : AnalytiksService {
             override fun track(action: AnalytiksAction) {
                 fail("Should never be called")
             }
@@ -45,24 +45,24 @@ internal class AnalytiksTest {
 
         @Test
         fun `with one service and serviceCount returns 1`() {
-            Analytiks.registerService(TestService(name = "TEST_1"))
+            Analytiks.registerService(TestService())
             assertEquals(expected = 1, actual = Analytiks.serviceCount)
         }
 
         @Test
-        fun `with two different services and serviceCount returns 2`() {
-            Analytiks.registerService(TestService(name = "TEST_1"))
-            Analytiks.registerService(TestService(name = "TEST_2"))
+        fun `with two different service instances and serviceCount returns 2`() {
+            Analytiks.registerService(TestService())
+            Analytiks.registerService(TestService())
             assertEquals(expected = 2, actual = Analytiks.serviceCount)
         }
 
         @Test
-        fun `with two equal services throws IllegalArgumentException`() {
-            Analytiks.registerService(TestService(name = "TEST_1"))
-
-            val failingLambda = { Analytiks.registerService(TestService(name = "TEST_1")) }
-
-            assertThrows<AlreadyRegisteredService> { failingLambda() }
+        fun `with same service instances throws AlreadyRegistered`() {
+            val service = TestService()
+            assertThrows<AlreadyRegisteredService> {
+                Analytiks.registerService(service)
+                Analytiks.registerService(service)
+            }
         }
 
     }
@@ -73,7 +73,6 @@ internal class AnalytiksTest {
         private val testEvent = AnalytiksAction.Event("TEST_EVENT")
 
         private inner class TestService(
-            override val name: String = "TEST_SERVICE",
             private val onTrack: () -> Unit,
         ) : AnalytiksService {
             override fun track(action: AnalytiksAction) {
@@ -106,7 +105,6 @@ internal class AnalytiksTest {
         private val testView = AnalytiksAction.View(name = "TEST_VIEW")
 
         private inner class TestService(
-            override val name: String = "TEST_SERVICE",
             private val onTrack: () -> Unit
         ) : AnalytiksService {
             override fun track(action: AnalytiksAction) {

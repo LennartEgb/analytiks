@@ -18,12 +18,16 @@ class FirebaseService(private val firebase: FirebaseAnalytics) : AnalytiksServic
     }
 
     private fun logView(name: String, params: Map<String, String>) {
-        val eventMap = mapOf(FirebaseAnalytics.Param.SCREEN_NAME to name) + params
-        firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, eventMap.toBundle())
+        val eventBundle = mapOf(FirebaseAnalytics.Param.SCREEN_NAME to name)
+            .plus(params)
+            .toBundle()
+        firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, eventBundle)
     }
 
     private fun logEvent(name: String, params: Map<String, String>) {
-        val eventMap = mapOf(FirebaseAnalytics.Param.ITEM_NAME to name) + params
-        firebase.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, eventMap.toBundle())
+        val eventBundle = mapOf(FirebaseAnalytics.Param.ITEM_NAME to name)
+            .plus(params)
+            .toBundle()
+        firebase.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, eventBundle)
     }
 }

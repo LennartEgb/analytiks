@@ -1,6 +1,5 @@
 package de.lennartegb.analytiks
 
-import de.lennartegb.analytiks.errors.AlreadyRegisteredService
 import de.lennartegb.analytiks.errors.RegisteringFailed
 
 
@@ -36,14 +35,11 @@ object Analytiks : AnalytiksService {
     /**
      * Registers an [AnalytiksService] to be used for tracking.
      * @param service An [AnalytiksService] to be registered.
-     * @throws AlreadyRegisteredService if two services with the same name are registered.
      */
     fun registerService(service: AnalytiksService) {
         synchronized(services) {
             if (service is Analytiks) throw RegisteringFailed("Cannot register Analytiks to itself.")
-            service.takeUnless { it in services }
-                ?.also { services.add(it) }
-                ?: throw AlreadyRegisteredService("The service ${service::class.java.name} is already registered.")
+            service.takeUnless { it in services }?.also { services.add(it) }
         }
     }
 

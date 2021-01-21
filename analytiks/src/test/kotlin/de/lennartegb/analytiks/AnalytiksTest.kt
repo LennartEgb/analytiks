@@ -1,6 +1,5 @@
 package de.lennartegb.analytiks
 
-import de.lennartegb.analytiks.errors.AlreadyRegisteredService
 import de.lennartegb.analytiks.errors.RegisteringFailed
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -57,14 +56,17 @@ internal class AnalytiksTest {
         }
 
         @Test
-        fun `with same service instances throws AlreadyRegistered`() {
+        fun `with two same instances registered serviceCount returns 1`() {
             val service = TestService()
-            assertThrows<AlreadyRegisteredService> {
-                Analytiks.registerService(service)
-                Analytiks.registerService(service)
-            }
-        }
 
+            Analytiks.registerService(service)
+            Analytiks.registerService(service)
+
+            assertEquals(
+                expected = 1,
+                actual = Analytiks.serviceCount
+            )
+        }
     }
 
     @Nested

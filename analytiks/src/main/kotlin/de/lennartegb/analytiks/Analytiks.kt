@@ -22,7 +22,7 @@ import de.lennartegb.analytiks.errors.RegisteringFailed
  * ```
  */
 object Analytiks : AnalytiksService {
-    private val services = mutableListOf<AnalytiksService>()
+    private val services = mutableSetOf<AnalytiksService>()
 
     /**
      * Return amount of services registered.
@@ -39,7 +39,7 @@ object Analytiks : AnalytiksService {
     fun registerService(service: AnalytiksService) {
         synchronized(services) {
             if (service is Analytiks) throw RegisteringFailed("Cannot register Analytiks to itself.")
-            service.takeUnless { it in services }?.also { services.add(it) }
+            services.add(service)
         }
     }
 

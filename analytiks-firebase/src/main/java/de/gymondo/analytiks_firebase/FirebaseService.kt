@@ -13,15 +13,17 @@ class FirebaseService(private val firebase: FirebaseAnalytics) : AnalytiksServic
     override fun track(action: AnalytiksAction) {
         when (action) {
             is AnalytiksAction.Event -> logEvent(action.name, action.params)
-            is AnalytiksAction.View -> logAction(action.name, action.params)
+            is AnalytiksAction.View -> logView(action.name, action.params)
         }
     }
 
-    private fun logAction(name: String, params: Map<String, String>) {
-        // TODO: 12.01.21 - ScreenView
+    private fun logView(name: String, params: Map<String, String>) {
+        val eventMap = mapOf(FirebaseAnalytics.Param.SCREEN_NAME to name) + params
+        firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, eventMap.toBundle())
     }
 
     private fun logEvent(name: String, params: Map<String, String>) {
-        firebase.logEvent(name, params.toBundle())
+        val eventMap = mapOf(FirebaseAnalytics.Param.ITEM_NAME to name) + params
+        firebase.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, eventMap.toBundle())
     }
 }

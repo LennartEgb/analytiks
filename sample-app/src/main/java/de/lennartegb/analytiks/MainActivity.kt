@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import de.lennartegb.analytiks.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private var clickCount: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.buttonTrack.setOnClickListener {
-            Analytiks.track(ButtonClickEvent("That"))
+            Analytiks.track(ButtonClickEvent(++clickCount))
         }
     }
 
@@ -21,11 +24,11 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-private val ButtonClickEvent: ((String) -> AnalytiksAction) = { value ->
+private val ButtonClickEvent: ((count: Int) -> AnalytiksAction) = { count ->
     AnalytiksAction.Event(
-        name = "Button Clicked",
-        params = mapOf("This" to value)
+        name = "main_button",
+        params = mapOf("count" to count.toString())
     )
 }
 
-private val MainScreenView = AnalytiksAction.View(name = "Main screen displayed")
+private val MainScreenView = AnalytiksAction.View(name = "main_screen")

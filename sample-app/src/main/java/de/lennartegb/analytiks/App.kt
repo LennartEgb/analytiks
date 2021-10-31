@@ -1,31 +1,29 @@
 package de.lennartegb.analytiks
 
 import android.app.Application
-import timber.log.Timber
+import android.util.Log
 
+@Suppress("unused")
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-            Analytiks.registerService(DebugService())
+            Analytiks.register(DebugService())
         }
-
     }
 
 }
 
-private class DebugService : AnalytiksService {
-    override val name: String
-        get() = "DEBUG_SERVICE"
-
+private class DebugService(private val tag: String = "Analytiks") : AnalytiksService {
     override fun track(action: AnalytiksAction) {
-        when (action) {
-            is AnalytiksAction.Event -> Timber.d("EVENT: $action")
-            is AnalytiksAction.View -> Timber.d("VIEW: $action")
+        val type = when (action) {
+            is AnalytiksAction.Event -> "EVENT"
+            is AnalytiksAction.View -> "VIEW"
         }
+        val name = action.name
+        val params = action.params
+        Log.d(tag, "$type: $name $params")
     }
-
 }

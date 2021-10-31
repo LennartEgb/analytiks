@@ -1,36 +1,22 @@
 package de.lennartegb.analytiks
 
-import de.lennartegb.analytiks.errors.RegisteringFailed
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
-
 internal class AnalytiksTest {
-
 
     @BeforeEach
     fun cleanUpAnalytics() {
         Analytiks.clearAllServices()
     }
 
-
     @Test
     fun `cannot register Analytiks to itself`() {
-        assertThrows<RegisteringFailed> { Analytiks.registerService(Analytiks) }
-    }
-
-
-    @Nested
-    inner class GetServiceCount {
-        @Test
-        fun `when no service was added returns 0`() {
-            assertEquals(expected = 0, actual = Analytiks.serviceCount)
-        }
+        assertThrows<IllegalStateException> { Analytiks.register(Analytiks) }
     }
 
     @Nested
@@ -44,28 +30,21 @@ internal class AnalytiksTest {
 
         @Test
         fun `with one service and serviceCount returns 1`() {
-            Analytiks.registerService(TestService())
-            assertEquals(expected = 1, actual = Analytiks.serviceCount)
+            Analytiks.register(TestService())
         }
 
         @Test
         fun `with two different service instances and serviceCount returns 2`() {
-            Analytiks.registerService(TestService())
-            Analytiks.registerService(TestService())
-            assertEquals(expected = 2, actual = Analytiks.serviceCount)
+            Analytiks.register(TestService())
+            Analytiks.register(TestService())
         }
 
         @Test
         fun `with two same instances registered serviceCount returns 1`() {
             val service = TestService()
 
-            Analytiks.registerService(service)
-            Analytiks.registerService(service)
-
-            assertEquals(
-                expected = 1,
-                actual = Analytiks.serviceCount
-            )
+            Analytiks.register(service)
+            Analytiks.register(service)
         }
     }
 
@@ -90,7 +69,7 @@ internal class AnalytiksTest {
             var trackingIsCalled = false
             val service = TestService(onTrack = { trackingIsCalled = true })
 
-            Analytiks.registerService(service)
+            Analytiks.register(service)
 
             Analytiks.track(testEvent)
 
@@ -122,7 +101,7 @@ internal class AnalytiksTest {
             var trackingIsCalled = false
             val service = TestService(onTrack = { trackingIsCalled = true })
 
-            Analytiks.registerService(service)
+            Analytiks.register(service)
 
             Analytiks.track(testView)
 

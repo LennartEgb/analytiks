@@ -1,8 +1,5 @@
 package de.lennartegb.analytiks
 
-import de.lennartegb.analytiks.errors.RegisteringFailed
-
-
 /**
  * Analytics object, that is used for tracking [AnalytiksAction]s. The pattern
  * of Jake Whartons Timber was used as a role model. The idea behind this is a SOLID implementation
@@ -25,20 +22,12 @@ object Analytiks : AnalytiksService {
     private val services = mutableSetOf<AnalytiksService>()
 
     /**
-     * Return amount of services registered.
-     */
-    val serviceCount: Int
-        get() = synchronized(services) {
-            return@synchronized services.size
-        }
-
-    /**
      * Registers an [AnalytiksService] to be used for tracking.
      * @param service An [AnalytiksService] to be registered.
      */
-    fun registerService(service: AnalytiksService) {
+    fun register(service: AnalytiksService) {
         synchronized(services) {
-            if (service is Analytiks) throw RegisteringFailed("Cannot register Analytiks to itself.")
+            if (service is Analytiks) error("Cannot register Analytiks to itself.")
             services.add(service)
         }
     }

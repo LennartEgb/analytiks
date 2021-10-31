@@ -21,7 +21,7 @@ sealed class AnalytiksAction(val name: String, val params: Params) {
         constructor(
             name: String,
             params: (MutableParams.() -> Unit)
-        ) : this(name = name, params = LinkedHashMap<String, String>().also(params).toMap())
+        ) : this(name = name, params = mutableMapOf<String, String>().apply(params))
     }
 
     /**
@@ -34,7 +34,7 @@ sealed class AnalytiksAction(val name: String, val params: Params) {
         constructor(
             name: String,
             params: (MutableParams.() -> Unit)
-        ) : this(name = name, params = LinkedHashMap<String, String>().also(params).toMap())
+        ) : this(name = name, params = mutableMapOf<String, String>().apply(params))
     }
 }
 

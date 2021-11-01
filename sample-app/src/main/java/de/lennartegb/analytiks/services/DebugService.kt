@@ -6,16 +6,19 @@ import de.lennartegb.analytiks.AnalytiksService
 
 class DebugService(private val tag: String = "Analytiks") : AnalytiksService {
     override fun track(action: AnalytiksAction) {
-        val type = when (action) {
-            is AnalytiksAction.Event -> "EVENT"
-            is AnalytiksAction.View  -> "VIEW"
-        }
-        val params = action.params.takeUnless { it.isEmpty() }
-        val message = listOfNotNull(
-            "$type:",
-            action.name,
-            params
-        ).joinToString(" ")
-        Log.d(tag, message)
+        Log.d(tag, action.message)
+    }
+
+    private val AnalytiksAction.message: String get() {
+        return listOfNotNull(
+            "${this.tag}:",
+            name,
+            params.takeUnless { it.isEmpty() }
+        ).joinToString(separator = " ")
+    }
+
+    private val AnalytiksAction.tag: String get() = when(this) {
+        is AnalytiksAction.Event -> "Event"
+        is AnalytiksAction.View -> "View"
     }
 }

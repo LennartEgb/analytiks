@@ -1,9 +1,11 @@
-package de.lennartegb.analytiks
+package de.lennartegb.analytiks.services
 
 import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.google.firebase.analytics.FirebaseAnalytics
+import de.lennartegb.analytiks.AnalytiksAction
+import de.lennartegb.analytiks.AnalytiksService
 
 /**
  * This is how an [AnalytiksService] for firebase logging could look like.

@@ -50,6 +50,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.1")
     implementation(project(":analytiks"))
 
+    implementation("com.google.firebase:firebase-core:20.0.0")
+
     testImplementation("junit:junit:4.13.2")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.3")

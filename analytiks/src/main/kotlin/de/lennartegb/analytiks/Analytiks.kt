@@ -27,18 +27,11 @@ object Analytiks : AnalytiksService {
      */
     fun register(service: AnalytiksService) {
         synchronized(services) {
-            if (service is Analytiks) error("Cannot register Analytiks to itself.")
+            require(service !is Analytiks) { "Cannot register Analytiks to itself." }
             services.add(service)
         }
     }
-
-    /**
-     * Clears all [AnalytiksService]s.
-     */
-    fun clearAllServices() {
-        services.clear()
-    }
-
+    
     override fun track(action: AnalytiksAction) {
         services.forEach { it.track(action) }
     }

@@ -1,8 +1,5 @@
 package de.lennartegb.analytiks
 
-private typealias MutableParams = MutableMap<String, String>
-internal typealias Params = Map<String, String>
-
 /**
  * An action that must be send to a service.
  * @param name of the given action
@@ -22,6 +19,13 @@ sealed class AnalytiksAction(val name: String, val params: Params) {
             name: String,
             params: (MutableParams.() -> Unit)
         ) : this(name = name, params = mutableMapOf<String, String>().apply(params))
+
+        override fun equals(other: Any?): Boolean {
+            if (other !is Event) return false
+            return name == other.name && params == other.params
+        }
+
+        override fun hashCode(): Int = javaClass.hashCode()
     }
 
     /**
@@ -35,6 +39,13 @@ sealed class AnalytiksAction(val name: String, val params: Params) {
             name: String,
             params: (MutableParams.() -> Unit)
         ) : this(name = name, params = mutableMapOf<String, String>().apply(params))
+
+        override fun equals(other: Any?): Boolean {
+            if (other !is View) return false
+            return name == other.name && params == other.params
+        }
+
+        override fun hashCode(): Int = javaClass.hashCode()
     }
 }
 

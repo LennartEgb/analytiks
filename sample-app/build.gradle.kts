@@ -48,7 +48,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.1")
+
     implementation(project(":analytiks"))
+    implementation(project(":analytiks-android-log"))
 
     implementation("com.google.firebase:firebase-core:20.0.0")
 

@@ -2,3 +2,4 @@ include ':analytiks'
 include ':sample-app'
 rootProject.name = "Analytics"
 include ':analytiks-firebase'
+include ':analytiks-android-log'

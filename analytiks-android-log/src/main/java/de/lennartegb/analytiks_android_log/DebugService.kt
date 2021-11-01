@@ -1,4 +1,4 @@
-package de.lennartegb.analytiks.services
+package de.lennartegb.analytiks_android_log
 
 import android.util.Log
 import de.lennartegb.analytiks.AnalytiksAction

@@ -1,7 +1,7 @@
 package de.lennartegb.analytiks
 
 import android.app.Application
-import de.lennartegb.analytiks.services.DebugService
+import de.lennartegb.analytiks_android_log.DebugService
 
 @Suppress("unused")
 class App : Application() {

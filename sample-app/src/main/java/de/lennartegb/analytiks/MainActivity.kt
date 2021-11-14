@@ -2,19 +2,36 @@ package de.lennartegb.analytiks
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import de.lennartegb.analytiks.databinding.ActivityMainBinding
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 
 class MainActivity : AppCompatActivity() {
 
-    private var clickCount: Int = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.buttonTrack.setOnClickListener {
-            Analytiks.track(ButtonClickEvent(++clickCount))
+        setContentView(R.layout.activity_main)
+        findViewById<ComposeView>(R.id.composeView).setContent {
+            var counter by rememberSaveable { mutableStateOf(0) }
+            Scaffold {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Button(onClick = { Analytiks.track(ButtonClickEvent(++counter))}) {
+                        Text(text = "Track Event")
+                    }
+                }
+            }
         }
     }
 

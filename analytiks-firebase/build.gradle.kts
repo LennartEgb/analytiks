@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementation(project(path = ":analytiks"))
-    implementation(dependencyNotation = "com.google.firebase:firebase-core:20.0.0")
+    implementation(platform(notation = "com.google.firebase:firebase-bom:29.0.0"))
+    implementation(dependencyNotation = "com.google.firebase:firebase-analytics-ktx")
     testImplementation(dependencyNotation = "junit:junit:4.13.2")
 }

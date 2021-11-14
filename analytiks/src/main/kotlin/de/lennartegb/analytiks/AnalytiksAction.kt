@@ -2,50 +2,28 @@ package de.lennartegb.analytiks
 
 /**
  * An action that must be send to a service.
- * @param name of the given action
- * @param params to send for analytics
  */
-@Suppress("MemberVisibilityCanBePrivate")
-sealed class AnalytiksAction(val name: String, val params: Params) {
+sealed interface AnalytiksAction {
 
     /**
      * An event that represents an action of the user.
+     * @param name of the given event
+     * @param params to send to the [AnalytiksService]
      */
-    class Event(
-        name: String,
-        params: Params = emptyMap()
-    ) : AnalytiksAction(name, params) {
+    data class Event(
+        val name: String,
+        val params: Params = emptyMap()
+    ) : AnalytiksAction {
         constructor(
             name: String,
             params: (MutableParams.() -> Unit)
         ) : this(name = name, params = mutableMapOf<String, String>().apply(params))
-
-        override fun equals(other: Any?): Boolean {
-            if (other !is Event) return false
-            return name == other.name && params == other.params
-        }
-
-        override fun hashCode(): Int = javaClass.hashCode()
     }
 
     /**
      * An event that represents a view of the user.
+     * @param name of the screen to be tracked.
      */
-    class View(
-        name: String,
-        params: Params = emptyMap()
-    ) : AnalytiksAction(name, params) {
-        constructor(
-            name: String,
-            params: (MutableParams.() -> Unit)
-        ) : this(name = name, params = mutableMapOf<String, String>().apply(params))
-
-        override fun equals(other: Any?): Boolean {
-            if (other !is View) return false
-            return name == other.name && params == other.params
-        }
-
-        override fun hashCode(): Int = javaClass.hashCode()
-    }
+    class View(val name: String) : AnalytiksAction
 }
 

@@ -27,7 +27,9 @@ class MainActivity : AppCompatActivity() {
 private val ButtonClickEvent: ((count: Int) -> AnalytiksAction) = { count ->
     AnalytiksAction.Event(
         name = "main_button",
-        params = mapOf("count" to count.toString())
+        params = {
+            put("count", count.toString())
+        }
     )
 }
 

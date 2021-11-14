@@ -19,8 +19,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        findViewById<ComposeView>(R.id.composeView).setContent {
+        val view = ComposeView(this)
+        setContentView(view)
+        view.setContent {
             var counter by rememberSaveable { mutableStateOf(0) }
             Scaffold {
                 Box(

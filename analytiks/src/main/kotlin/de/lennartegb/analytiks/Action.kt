@@ -3,7 +3,7 @@ package de.lennartegb.analytiks
 /**
  * An action that must be send to a service.
  */
-sealed interface AnalytiksAction {
+sealed interface Action {
 
     /**
      * An event that represents an action of the user.
@@ -13,7 +13,7 @@ sealed interface AnalytiksAction {
     data class Event(
         val name: String,
         val params: Params = emptyMap()
-    ) : AnalytiksAction {
+    ) : Action {
         constructor(
             name: String,
             params: (MutableParams.() -> Unit)
@@ -24,6 +24,6 @@ sealed interface AnalytiksAction {
      * An event that represents a view of the user.
      * @param name of the screen to be tracked.
      */
-    class View(val name: String) : AnalytiksAction
+    class View(val name: String) : Action
 }
 

@@ -1,7 +1,7 @@
 package de.lennartegb.analytiks
 
 /**
- * Analytics object, that is used for tracking [AnalytiksAction]s. The pattern
+ * Analytics object, that is used for tracking [Action]s. The pattern
  * of Jake Whartons Timber was used as a role model. The idea behind this is a SOLID implementation
  * for using analytics based on the implementation by sofakingforever but in a lightweight
  * interface. Example usage:
@@ -32,7 +32,7 @@ object Analytiks : AnalytiksService {
         }
     }
     
-    override fun track(action: AnalytiksAction) {
+    override fun track(action: Action) {
         services.forEach { it.track(action) }
     }
 

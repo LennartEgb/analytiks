@@ -1,22 +1,22 @@
 package de.lennartegb.analytiks_android_log
 
 import android.util.Log
-import de.lennartegb.analytiks.AnalytiksAction
+import de.lennartegb.analytiks.Action
 import de.lennartegb.analytiks.AnalytiksService
 
 class DebugService(private val tag: String = "Analytiks") : AnalytiksService {
 
-    override fun track(action: AnalytiksAction) {
+    override fun track(action: Action) {
         Log.d(tag, action.message)
     }
 
-    private val AnalytiksAction.message: String get() = when (this) {
-        is AnalytiksAction.Event -> listOfNotNull(type, name, params.takeUnless { it.isEmpty() })
-        is AnalytiksAction.View -> listOfNotNull(type, name)
+    private val Action.message: String get() = when (this) {
+        is Action.Event -> listOfNotNull(type, name, params.takeUnless { it.isEmpty() })
+        is Action.View -> listOfNotNull(type, name)
     }.joinToString(separator = " ")
 
-    private val AnalytiksAction.type: String get() = when(this) {
-        is AnalytiksAction.Event -> "Event:"
-        is AnalytiksAction.View -> "View:"
+    private val Action.type: String get() = when(this) {
+        is Action.Event -> "Event:"
+        is Action.View -> "View:"
     }
 }

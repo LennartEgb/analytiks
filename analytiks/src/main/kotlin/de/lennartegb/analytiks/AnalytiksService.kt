@@ -8,8 +8,8 @@ interface AnalytiksService {
 
     /**
      * Tracks an action of the user.
-     * @param action [AnalytiksAction] to be tracked.
+     * @param action [Action] to be tracked.
      */
-    fun track(action: AnalytiksAction)
+    fun track(action: Action)
 
 }

@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-private val ButtonClickEvent: ((count: Int) -> AnalytiksAction) = { count ->
-    AnalytiksAction.Event(
+private val ButtonClickEvent: ((count: Int) -> Action) = { count ->
+    Action.Event(
         name = "main_button",
         params = {
             put("count", count.toString())
@@ -51,4 +51,4 @@ private val ButtonClickEvent: ((count: Int) -> AnalytiksAction) = { count ->
     )
 }
 
-private val MainScreenView = AnalytiksAction.View(name = "main_screen")
+private val MainScreenView = Action.View(name = "main_screen")

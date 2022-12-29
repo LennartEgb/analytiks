@@ -1,6 +1,6 @@
 package de.lennartegb.analytiks_firebase
 
-import de.lennartegb.analytiks.AnalytiksAction
+import de.lennartegb.analytiks.Action
 import org.junit.Test
 
 internal class FirebaseServiceTest {
@@ -19,7 +19,7 @@ internal class FirebaseServiceTest {
             )
         )
 
-        service.track(AnalytiksAction.View(name = "ScreenName"))
+        service.track(Action.View(name = "ScreenName"))
 
         assert(trackedName == "screen_view")
         assert(trackedParams == mapOf("screen_name" to "ScreenName"))
@@ -39,7 +39,7 @@ internal class FirebaseServiceTest {
             )
         )
 
-        service.track(AnalytiksAction.Event(name = "click"))
+        service.track(Action.Event(name = "click"))
 
         assert(trackedName == "click")
         assert(trackedParams == emptyMap<String, String>())
@@ -59,7 +59,7 @@ internal class FirebaseServiceTest {
             )
         )
 
-        service.track(AnalytiksAction.Event(name = "click", params = mapOf("position" to "today")))
+        service.track(Action.Event(name = "click", params = mapOf("position" to "today")))
 
         assert(trackedName == "click")
         assert(trackedParams == mapOf("position" to "today"))

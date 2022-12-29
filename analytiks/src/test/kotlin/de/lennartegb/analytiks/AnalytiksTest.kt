@@ -15,7 +15,7 @@ internal class AnalytiksTest {
         var isEventCalled = false
         Analytiks.register(TestService(onEvent = { isEventCalled = true }))
 
-        Analytiks.track(AnalytiksAction.Event(name = "Event"))
+        Analytiks.track(Action.Event(name = "Event"))
 
         assertTrue(actual = isEventCalled, message = "Event must be called")
     }
@@ -25,7 +25,7 @@ internal class AnalytiksTest {
         var isViewCalled = false
         Analytiks.register(TestService(onView = { isViewCalled = true }))
 
-        Analytiks.track(AnalytiksAction.View(name = "View"))
+        Analytiks.track(Action.View(name = "View"))
 
         assertTrue(actual = isViewCalled, message = "View must be called")
     }

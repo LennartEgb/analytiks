@@ -4,7 +4,7 @@ package de.lennartegb.analytiks
  * Service used for analytics. Examples for analytics could be Firebase, Sentry or an own
  * implementation.
  */
-interface AnalytiksService {
+interface Service {
 
     /**
      * Tracks an action of the user.

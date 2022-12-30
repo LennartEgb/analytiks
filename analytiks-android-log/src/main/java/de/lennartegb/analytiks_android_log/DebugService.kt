@@ -2,9 +2,9 @@ package de.lennartegb.analytiks_android_log
 
 import android.util.Log
 import de.lennartegb.analytiks.Action
-import de.lennartegb.analytiks.AnalytiksService
+import de.lennartegb.analytiks.Service
 
-class DebugService(private val tag: String = "Analytiks") : AnalytiksService {
+class DebugService(private val tag: String = "Analytiks") : Service {
 
     override fun track(action: Action) {
         Log.d(tag, action.message)

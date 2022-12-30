@@ -8,7 +8,7 @@ sealed interface Action {
     /**
      * An event that represents an action of the user.
      * @param name of the given event
-     * @param params to send to the [AnalytiksService]
+     * @param params to send to the [Service]
      */
     data class Event(
         val name: String,

@@ -18,14 +18,14 @@ package de.lennartegb.analytiks
  * Analytiks.track(CustomClickEvent)
  * ```
  */
-object Analytiks : AnalytiksService {
-    private val services = mutableSetOf<AnalytiksService>()
+object Analytiks : Service {
+    private val services = mutableSetOf<Service>()
 
     /**
-     * Registers an [AnalytiksService] to be used for tracking.
-     * @param service An [AnalytiksService] to be registered.
+     * Registers an [Service] to be used for tracking.
+     * @param service An [Service] to be registered.
      */
-    fun register(service: AnalytiksService) {
+    fun register(service: Service) {
         synchronized(services) {
             require(service !is Analytiks) { "Cannot register Analytiks to itself." }
             services.add(service)

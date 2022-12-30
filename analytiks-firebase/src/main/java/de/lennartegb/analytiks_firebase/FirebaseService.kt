@@ -3,14 +3,14 @@ package de.lennartegb.analytiks_firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import de.lennartegb.analytiks.Action
-import de.lennartegb.analytiks.AnalytiksService
+import de.lennartegb.analytiks.Service
 import de.lennartegb.analytiks_firebase.impl.FirebaseImpl
 import com.google.firebase.ktx.Firebase as FirebaseOrigin
 
 /**
- * This is how an [AnalytiksService] for firebase logging could look like.
+ * This is how an [Service] for firebase logging could look like.
  */
-class FirebaseService internal constructor(private val firebase: Firebase) : AnalytiksService {
+class FirebaseService internal constructor(private val firebase: Firebase) : Service {
 
     @Suppress("unused")
     constructor() : this(FirebaseImpl(FirebaseOrigin.analytics))

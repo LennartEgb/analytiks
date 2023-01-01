@@ -16,7 +16,7 @@ class DebugService(private val tag: String = "Analytiks") : Service {
     }.joinToString(separator = " ")
 
     private val Action.type: String get() = when(this) {
-        is Action.Event -> "Event:"
-        is Action.View -> "View:"
+        is Action.Event -> "$tag Event:"
+        is Action.View -> "$tag View:"
     }
 }

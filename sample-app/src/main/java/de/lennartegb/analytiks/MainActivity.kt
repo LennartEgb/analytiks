@@ -1,7 +1,8 @@
 package de.lennartegb.analytiks
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,27 +16,26 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val view = ComposeView(this)
-        setContentView(view)
-        view.setContent {
+        setContent {
             var counter by rememberSaveable { mutableStateOf(0) }
+            LaunchedEffect(key1 = Unit) { Analytiks.track(MainScreenView) }
+
             Scaffold {
-                LaunchedEffect(key1 = Unit) { Analytiks.track(MainScreenView) }
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(it),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Button(onClick = { Analytiks.track(ButtonClickEvent(++counter)) }) {
-                        Text(text = "Track Event")
-                    }
+                    Button(
+                        onClick = { Analytiks.track(ButtonClickEvent(++counter)) },
+                        content = { Text(text = "Track Event") }
+                    )
                 }
             }
         }

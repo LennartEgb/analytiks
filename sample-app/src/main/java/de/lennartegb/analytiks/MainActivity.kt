@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,31 +26,24 @@ class MainActivity : AppCompatActivity() {
         view.setContent {
             var counter by rememberSaveable { mutableStateOf(0) }
             Scaffold {
+                LaunchedEffect(key1 = Unit) { Analytiks.track(MainScreenView) }
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Button(onClick = { Analytiks.track(ButtonClickEvent(++counter))}) {
+                    Button(onClick = { Analytiks.track(ButtonClickEvent(++counter)) }) {
                         Text(text = "Track Event")
                     }
                 }
             }
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        Analytiks.track(MainScreenView)
-    }
 }
 
 private val ButtonClickEvent: ((count: Int) -> Action) = { count ->
-    Action.Event(
-        name = "main_button",
-        params = {
-            put("count", count.toString())
-        }
-    )
+    Action.Event(name = "main_button") { put("count", count.toString()) }
 }
 
 private val MainScreenView = Action.View(name = "main_screen")

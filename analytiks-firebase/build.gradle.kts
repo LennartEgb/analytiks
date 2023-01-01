@@ -33,6 +33,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    namespace = "de.lennartegb.analytiks_firebase"
 }
 
 dependencies {
